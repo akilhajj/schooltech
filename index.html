@@ -3,47 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصتي التعليمية الذكية</title>
+    <title>لوحة التحكم الشاملة - مصنع المحتوى التعليمي</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f4f8; padding: 20px; color: #2c3e50; margin: 0; }
-        .header { text-align: center; background: linear-gradient(135deg, #3498db, #2c3e50); color: white; padding: 30px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .container { max-width: 900px; margin: 0 auto; }
-        .card { background: white; padding: 25px; margin-bottom: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-right: 6px solid #3498db; transition: 0.3s; }
-        .card:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.1); }
-        .subject { font-weight: bold; color: #e74c3c; font-size: 1.3em; margin-bottom: 5px; }
-        .title { font-size: 1.1em; color: #7f8c8d; margin-bottom: 15px; }
-        audio { width: 100%; margin: 15px 0; outline: none; }
-        .content { font-size: 1.05em; line-height: 1.8; background: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px solid #eee; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #121824; padding: 20px; color: #fff; margin: 0; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { text-align: center; background: linear-gradient(135deg, #05c46b, #0be881); padding: 25px; border-radius: 12px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        .branch-title { font-size: 2em; background: #1e272e; padding: 10px 20px; border-radius: 8px; margin-top: 40px; color: #ef5777; border-left: 8px solid #ef5777; text-shadow: 1px 1px 2px #000; }
+        .card { background: #1e272e; padding: 25px; margin-top: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); border: 1px solid #2c3e50; }
+        .subject { font-weight: bold; color: #0be881; font-size: 1.4em; border-bottom: 1px solid #3d4451; padding-bottom: 10px; }
+        .section-title { font-weight: bold; color: #ffd32a; margin-top: 15px; font-size: 1.1em; }
+        .box { background: #2f3542; padding: 15px; border-radius: 8px; margin-top: 5px; white-space: pre-line; line-height: 1.7; color: #dcdde1; }
+        audio { width: 100%; margin-top: 10px; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>📚 جدول الحصص اليومية التلقائية 📚</h1>
-            <p>حصص متجددة بالذكاء الاصطناعي مخصصة لمنهاجك التعليمي</p>
+            <h1>🛠️ لوحة صناعة المحتوى التعليمي المتقدمة 🛠️</h1>
+            <p>توليد يومي للمواد حسب الفروع (تاسع وعلمي وأدبي وديانة مسلم ومسيحي)</p>
         </div>
-        <div id="lessons-list"></div>
+        <div id="main-content"></div>
     </div>
 
     <script>
-        // قراءة ملف البيانات المحدث تلقائياً وعرضه للطالب
+        const branchNames = {
+            "تاسع_عام": "🎯 قسم الصف التاسع الأساسي",
+            "بكالوريا_علمي": "🔬 قسم الشهادة الثانوية - الفرع العلمي",
+            "بكالوريا_أدبي": "📚 قسم الشهادة الثانوية - الفرع الأدبي",
+            "خيارات_الديانة": "⛪ قسم التربية الدينية والمشتركات 🕌"
+        };
+
         fetch('data/lessons.json')
             .then(res => res.json())
             .then(data => {
-                const list = document.getElementById('lessons-list');
-                data.forEach(item => {
-                    list.innerHTML += `
-                        <div class="card">
-                            <div class="subject">📌 مادة: ${item.subject}</div>
-                            <div class="title">📖 درس اليوم: ${item.title}</div>
-                            <audio controls src="${item.audio}"></audio>
-                            <div class="content">${item.content}</div>
-                        </div>
-                    `;
-                });
-            })
-            .catch(err => {
-                document.getElementById('lessons-list').innerHTML = "<p style='text-align:center;'>جاري تجهيز حصص اليوم، يرجى تحديث الصفحة بعد دقائق...</p>";
+                const mainContainer = document.getElementById('main-content');
+                for (const [branchKey, lessons] of Object.entries(data)) {
+                    let branchHtml = `<div class="branch-title">${branchNames[branchKey] || branchKey}</div>`;
+                    
+                    lessons.forEach((item, index) => {
+                        branchHtml += `
+                            <div class="card">
+                                <div class="subject">📖 مادة: ${item.subject} (${item.title})</div>
+                                <div class="section-title">🔊 صوت المعلم للحصة جاهز للتنزيل:</div>
+                                <audio controls src="${item.audio}"></audio>
+                                <div class="section-title">📝 1. الشرح والنص المرجعي للدرس:</div>
+                                <div class="box">${item.sharah}</div>
+                                <div class="section-title">💡 2. الأسئلة والنماذج الامتحانية المتوقعة:</div>
+                                <div class="box">${item.asela}</div>
+                                <div class="section-title">✍️ 3. الامتحان الدوري المقترح ومفتاح الحل:</div>
+                                <div class="box">${item.exam}</div>
+                            </div>
+                        `;
+                    });
+                    mainContainer.innerHTML += branchHtml;
+                }
             });
     </script>
 </body>
