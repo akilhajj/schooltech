@@ -28,7 +28,10 @@ def get_ai_free_content(branch_name, subject, title):
 
 async def text_to_speech(text, filename):
     try:
-        sharah_text = text.split("2. [").replace("1. [شرح الأستاذ]:", "")
+        # تصحيح طريقة فصل النص الصوتي بأمان
+        parts = text.split("2. [")
+        sharah_text = parts[0].replace("1. [شرح الأستاذ]:", "") if len(parts) > 0 else text
+        
         communicate = edge_tts.Communicate(sharah_text, "ar-EG-ShakirNeural")
         await communicate.save(filename)
     except Exception as e:
@@ -51,9 +54,9 @@ async def main():
             await text_to_speech(full_content, f"./{audio_file}")
             
             parts = full_content.split("2. [")
-            sharah = parts.replace("1. [شرح الأستاذ]:", "") if len(parts) > 0 else full_content
-            asela = "2. [" + parts if len(parts) > 1 else "جاري التجهيز..."
-            exam = "3. [" + parts.split("3. [") if len(parts) > 1 and "3. [" in parts else "جاري التجهيز..."
+            sharah = parts[0].replace("1. [شرح الأستاذ]:", "") if len(parts) > 0 else full_content
+            asela = "2. [" + parts[1] if len(parts) > 1 else "جاري التجهيز..."
+            exam = "3. [" + parts[1].split("3. [")[1] if len(parts) > 1 and "3. [" in parts[1] else "جاري التجهيز..."
             
             final_output[branch].append({
                 "subject": subject,
