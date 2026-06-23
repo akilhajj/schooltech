@@ -5,13 +5,14 @@ import edge_tts
 from openai import OpenAI
 
 # جلب المفتاح السري تلقائياً من إعدادات غيت هاب الآمنة
-OLLAMA_API_KEY = os.environ.get("ea383a97ca584762bc99a83c2a0f790c.ySDwOXiKRLfmqYNs5YPa8126")
+OLLAMA_API_KEY = os.environ.get("OLLAMA_API_KEY")
 
-# إعداد الاتصال بالخادم السحابي الرسمي لـ Ollama
+# إعداد الاتصال بالخادم السحابي لـ Ollama
 client = OpenAI(
     base_url="https://ollama.com",
     api_key=OLLAMA_API_KEY
 )
+
 
 # جدول المناهج لليوم (7 مواد أساسية لصف التاسع كمثال)
 today_lessons = {
