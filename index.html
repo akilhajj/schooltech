@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصتي التعليمية الذكية</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f4f8; padding: 20px; color: #2c3e50; margin: 0; }
+        .header { text-align: center; background: linear-gradient(135deg, #3498db, #2c3e50); color: white; padding: 30px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .container { max-width: 900px; margin: 0 auto; }
+        .card { background: white; padding: 25px; margin-bottom: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-right: 6px solid #3498db; transition: 0.3s; }
+        .card:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.1); }
+        .subject { font-weight: bold; color: #e74c3c; font-size: 1.3em; margin-bottom: 5px; }
+        .title { font-size: 1.1em; color: #7f8c8d; margin-bottom: 15px; }
+        audio { width: 100%; margin: 15px 0; outline: none; }
+        .content { font-size: 1.05em; line-height: 1.8; background: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px solid #eee; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 جدول الحصص اليومية التلقائية 📚</h1>
+            <p>حصص متجددة بالذكاء الاصطناعي مخصصة لمنهاجك التعليمي</p>
+        </div>
+        <div id="lessons-list"></div>
+    </div>
+
+    <script>
+        // قراءة ملف البيانات المحدث تلقائياً وعرضه للطالب
+        fetch('data/lessons.json')
+            .then(res => res.json())
+            .then(data => {
+                const list = document.getElementById('lessons-list');
+                data.forEach(item => {
+                    list.innerHTML += `
+                        <div class="card">
+                            <div class="subject">📌 مادة: ${item.subject}</div>
+                            <div class="title">📖 درس اليوم: ${item.title}</div>
+                            <audio controls src="${item.audio}"></audio>
+                            <div class="content">${item.content}</div>
+                        </div>
+                    `;
+                });
+            })
+            .catch(err => {
+                document.getElementById('lessons-list').innerHTML = "<p style='text-align:center;'>جاري تجهيز حصص اليوم، يرجى تحديث الصفحة بعد دقائق...</p>";
+            });
+    </script>
+</body>
+</html>
